@@ -9,68 +9,130 @@ const directoryPathSporcularimiz = path.join('../Material-ui-template-modificati
 
 let TotalPackageCounter = 0;
 
-/* GET home page. */
-router.get('/Images/Sporcularimiz', function(req, res, next) {
+/* GET /Images/Sporcularimiz */
+router.get('/Images/Sporcularimiz', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-var Galeri= {};
-Galeri['Images'] = [];
+    var Galeri = {};
+    Galeri['Images'] = [];
 
-let counter = 1;
-//passsing directoryPath and callback function
-fs.readdir(directoryPathSporcularimiz, function (err, files) {
-    //handling error
-    if (err) {
-        return console.log('Unable to scan directory: ' + err);
-    } 
-    //listing all files using forEach
-    files.forEach(function (file) {
-        var data = {
-        imageNumber:counter++,
-        imageName:'/Images/Sporcularimiz/'+file,
-        };
-        Galeri['Images'].push(data);
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathSporcularimiz, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            var data = {
+                imageNumber: counter++,
+                imageName: '/Images/Sporcularimiz/' + file,
+            };
+            Galeri['Images'].push(data);
 
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
     });
-console.log(Galeri); 
-console.log("Package"+TotalPackageCounter++);
-res.json(Galeri);
-});
-  
+
 
 });
 
-router.get('/Images/Klubumuz',function(req,res,next)
-{
+router.get('/Images/Klubumuz', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-var Galeri= {};
-Galeri['Images'] = [];
+    var Galeri = {};
+    Galeri['Images'] = [];
 
-let counter = 1;
-//passsing directoryPath and callback function
-fs.readdir(directoryPathKlubumuz, function (err, files) {
-    //handling error
-    if (err) {
-        return console.log('Unable to scan directory: ' + err);
-    } 
-    //listing all files using forEach
-    files.forEach(function (file) {
-        var data = {
-        imageNumber:counter++,
-        imageName:"/Images/Klubumuz/"+file,
-        };
-        Galeri['Images'].push(data);
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathKlubumuz, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            var data = {
+                imageNumber: counter++,
+                imageName: "/Images/Klubumuz/" + file,
+            };
+            Galeri['Images'].push(data);
 
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
     });
-console.log(Galeri); 
-console.log("Package"+TotalPackageCounter++);
-res.json(Galeri);
+
 });
+
+router.get('/Images/Madalyalar', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var Galeri = {};
+    Galeri['Images'] = [];
+
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathMadalyalar, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            var data = {
+                imageNumber: counter++,
+                imageName: "/Images/Madalyalar/" + file,
+            };
+            Galeri['Images'].push(data);
+
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
+    });
+
+});
+
+// Haber dosyaları için düzenlenecek
+router.get('/Haberler', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var Haberler = {};
+    Haberler['Haberler'] = [];
+
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathMadalyalar, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            var data = {
+                imageNumber: counter++,
+                imageName: "/Images/Madalyalar/" + file,
+            };
+            Haberler['Haberler'].push(data);
+
+        });
+        console.log(Haberler);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Haberler);
+    });
 
 });
 module.exports = router;

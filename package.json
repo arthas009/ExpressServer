@@ -17,5 +17,13 @@
   "main": "app.js",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arthas009/ExpressServer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arthas009/ExpressServer/issues"
+  },
+  "homepage": "https://github.com/arthas009/ExpressServer#readme"
 }
