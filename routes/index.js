@@ -180,6 +180,7 @@ router.get('/Galeri/Sporcularimiz', function (req, res, next) {
     
 
 });
+
 router.get('/FarkliBilgiler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -190,6 +191,7 @@ router.get('/FarkliBilgiler', function (req, res, next) {
     
 
 });
+
 router.get('/OkculukHakkinda', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -200,6 +202,7 @@ router.get('/OkculukHakkinda', function (req, res, next) {
     
 
 });
+
 router.get('/2.%20El%20Malzemeler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -210,6 +213,7 @@ router.get('/2.%20El%20Malzemeler', function (req, res, next) {
     
 
 });
+
 router.get('/Iletisim', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -220,4 +224,5 @@ router.get('/Iletisim', function (req, res, next) {
     
 
 });
+
 module.exports = router;
