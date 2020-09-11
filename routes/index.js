@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const directoryPathRoot = path.join('../Material-ui-template-modification', 'build');
+const indexHtml =   path.join(__dirname+'/../public', 'index.html');
 
 const directoryPathKlubumuz = path.join("./public/Images", 'Klubumuz');
 const directoryPathMadalyalar = path.join("./public/Images", 'Madalyalar');
@@ -130,7 +131,7 @@ router.get('/AnaSayfa', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname+'/../public', 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -140,8 +141,8 @@ router.get('/Haberler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-   
-    res.sendFile(path.join(__dirname+'/../public', 'index.html'));
+    
+    res.sendFile(indexHtml);
     
 
 });
@@ -150,21 +151,20 @@ router.get('/Hakkinda/Hakkimizda', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-   
-    res.sendFile(path.join(__dirname, 'index.html'));
-    
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed    res.sendFile(indexHtml);
+    res.sendFile(indexHtml);
 
-});
 
-router.get('/Hakkinda/Kurslar', function (req, res, next) {
+})
+
+router.get('/Hakkinda/Kurslarimiz', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, 'index.html'));
-    
+    res.sendFile(indexHtml);
+
 
 });
 
@@ -174,7 +174,7 @@ router.get('/Galeri/Madalyalar', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -185,7 +185,7 @@ router.get('/Galeri/Klubumuz', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -196,7 +196,7 @@ router.get('/Galeri/Sporcularimiz', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -207,7 +207,7 @@ router.get('/FarkliBilgiler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -218,7 +218,7 @@ router.get('/OkculukHakkinda', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -229,7 +229,7 @@ router.get('/2.%20El%20Malzemeler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
@@ -240,7 +240,7 @@ router.get('/Iletisim', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(indexHtml);
     
 
 });
