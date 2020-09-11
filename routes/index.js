@@ -4,10 +4,10 @@ const path = require('path');
 const fs = require('fs');
 
 const directoryPathRoot = path.join('../Material-ui-template-modification', 'build');
-const directoryPathKlubumuz = path.join('../Material-ui-template-modification/public/Images', 'Klubumuz');
-const directoryPathMadalyalar = path.join('../Material-ui-template-modification/public/Images', 'Madalyalar');
-const directoryPathSporcularimiz = path.join('../Material-ui-template-modification/public/Images', 'Sporcularimiz');
 
+const directoryPathKlubumuz = path.join("./public/Images", 'Klubumuz');
+const directoryPathMadalyalar = path.join("./public/Images", 'Madalyalar');
+const directoryPathSporcularimiz = path.join("./public/Images", 'Sporcularimiz');
 let TotalPackageCounter = 0;
 
 /* GET /Images/Sporcularimiz */
@@ -28,6 +28,8 @@ router.get('/Images/Sporcularimiz', function (req, res, next) {
         }
         //listing all files using forEach
         files.forEach(function (file) {
+
+            //* mysql ilgili yerleri okuma kodu buraya eklenecek */ 
             var data = {
                 imageNumber: counter++,
                 imageName: '/Images/Sporcularimiz/' + file,
@@ -105,6 +107,11 @@ router.get('/Images/Madalyalar', function (req, res, next) {
 
 });
 
+
+
+
+
+
 router.get('/', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -112,7 +119,18 @@ router.get('/', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
 
 
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname+'/../public', 'index.html'));
+    
+
+});
+
+router.get('/AnaSayfa', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname+'/../public', 'index.html'));
     
 
 });
@@ -123,7 +141,7 @@ router.get('/Haberler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
    
-    res.sendFile(path.join(__dirname, '../../Material-ui-template-modification/build', 'index.html'));
+    res.sendFile(path.join(__dirname+'/../public', 'index.html'));
     
 
 });
