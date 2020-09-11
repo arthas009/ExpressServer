@@ -104,35 +104,120 @@ router.get('/Images/Madalyalar', function (req, res, next) {
 
 });
 
-// Haber dosyaları için düzenlenecek
+router.get('/', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+
 router.get('/Haberler', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-    var Haberler = {};
-    Haberler['Haberler'] = [];
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
 
-    let counter = 1;
-    //passsing directoryPath and callback function
-    fs.readdir(directoryPathMadalyalar, function (err, files) {
-        //handling error
-        if (err) {
-            return console.log('Unable to scan directory: ' + err);
-        }
-        //listing all files using forEach
-        files.forEach(function (file) {
-            var data = {
-                imageNumber: counter++,
-                imageName: "/Images/Madalyalar/" + file,
-            };
-            Haberler['Haberler'].push(data);
+});
 
-        });
-        console.log(Haberler);
-        console.log("Package" + TotalPackageCounter++);
-        res.json(Haberler);
-    });
+router.get('/Hakkinda/Hakkimizda', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+
+router.get('/Hakkinda/Kurslar', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+
+router.get('/Galeri/Madalyalar', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+
+router.get('/Galeri/Klubumuz', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+
+router.get('/Galeri/Sporcularimiz', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+router.get('/FarkliBilgiler', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+router.get('/OkculukHakkinda', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+router.get('/2.%20El%20Malzemeler', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
+
+});
+router.get('/Iletisim', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+   
+    res.sendFile(path.join(__dirname, '../public_html', 'index.html'));
+    
 
 });
 module.exports = router;
