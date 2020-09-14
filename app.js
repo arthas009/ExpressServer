@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var sqlite3 = require('sqlite3').verbose();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -25,6 +25,30 @@ app.use('/', indexRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+  if(err) {
+      console.log(err.message);
+  }
+  console.log("Connected to database!");
+});
+dbSchema = "create table if not exists haberler(haber_id int auto_increment, haber_basligi nvarchar(255),"
++"haber_icerigi nvarchar(1000), haber_tarihi date, haber_foto_yolu nvarchar(255), primary key(haber_id));"+
+
+
+"create table if not exists malzemeler(malzeme_id int auto_increment, malzeme_adi nvarchar(255),"+
+"malzeme_fiyati varchar(100), malzeme_ozellik nvarchar(255), malzeme_foto_yolu nvarchar(255), primary key(malzeme_id));"
+;
+gaziokculukDB.exec(dbSchema, function(err){
+  if (err) {
+      console.log(err)
+  }
+});
+gaziokculukDB.close();
+
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

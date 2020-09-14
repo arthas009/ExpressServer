@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const fs = require('fs');
-const mariadb = require('mariadb');
 const sqlite3 = require('sqlite3').verbose();
 
 const indexHtml = path.join(__dirname + '/../public', 'index.html');
@@ -244,7 +243,6 @@ router.get('/Iletisim', function (req, res, next) {
 
 });
 
-
 router.get('/haberlerigetir', function (req, res, next) {
 
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -258,10 +256,7 @@ router.get('/haberlerigetir', function (req, res, next) {
         }
         console.log("Connected to database!");
     });
-    dbSchema = "create table if not exists haberler(haber_id int auto_increment, haber_basligi nvarchar(255),"
-    +"haber_icerigi nvarchar(1000), haber_tarihi date, haber_foto_yolu nvarchar(255), primary key(haber_id))";
-
-
+    
     let sql = `SELECT * FROM haberler`;
 // ADD THIS CODE BELOW
 gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
@@ -271,11 +266,58 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
         console.log("Foreign Key Enforcement is on.")
     }
 });
-gaziokculukDB.exec(dbSchema, function(err){
-    if (err) {
-        console.log(err)
+
+/*
+    gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ', ['eba','ebaaa','2020-01-01','c://eba.public'], (err) => {
+        if(err) {
+            return console.log(err.message); 
+        }
+        console.log('Row was added to the table: ${this.lastID}');
+    })  
+*/
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+
+});
+
+router.get('/haberekle', function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+   
+    let sql = `SELECT * FROM haberler`;
+// ADD THIS CODE BELOW
+gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
+    if (error){
+        console.error("Pragma statement didn't work.")
+    } else {
+        console.log("Foreign Key Enforcement is on.")
     }
 });
+
+
     gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ', ['eba','ebaaa','2020-01-01','c://eba.public'], (err) => {
         if(err) {
             return console.log(err.message); 
@@ -300,6 +342,8 @@ gaziokculukDB.exec(dbSchema, function(err){
     gaziokculukDB.close();
 
 });
+
+
 
 router.get('/malzemelerigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -334,5 +378,10 @@ router.get('/malzemelerigetir', function (req, res, next) {
 
 
 });
+
+router.get('malzemeekle'), function (req,res,next)
+{
+    
+}
 
 module.exports = router;
