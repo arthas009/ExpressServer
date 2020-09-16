@@ -20,7 +20,12 @@
   "main": "app.js",
   "author": "",
   "license": "ISC",
+<<<<<<< Updated upstream
   "description": "",
+=======
+  "description": "It's main purpose is probide backend for static or dynamic web sites for commercial use :)",
+  "devDependencies": {},
+>>>>>>> Stashed changes
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arthas009/ExpressServer.git"
