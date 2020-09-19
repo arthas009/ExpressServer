@@ -256,7 +256,9 @@ router.get('/haberlerigetir', function (req, res, next) {
         }
         console.log("Connected to database!");
     });
-    
+
+    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
+
     let sql = `SELECT * FROM haberler`;
 // ADD THIS CODE BELOW
 gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
@@ -299,6 +301,11 @@ router.get('/haberekle', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+ 
+    if(req.query.haber_basligi===undefined  || req.query.haber_icerigi === undefined || req.query.haber_tarihi === undefined || req.query.haber_foto_yolu === undefined)
+    {
+        return;
+    }    
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
@@ -306,7 +313,7 @@ router.get('/haberekle', function (req, res, next) {
         }
         console.log("Connected to database!");
     });
-   
+    
     let sql = `SELECT * FROM haberler`;
 // ADD THIS CODE BELOW
 gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
@@ -317,12 +324,12 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
     }
 });
 
-
-    gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ', ['eba','ebaaa','2020-01-01','c://eba.public'], (err) => {
+    
+    gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ',
+     [req.query.haber_basligi,req.query.haber_icerigi,req.query.haber_tarihi,req.query.haber_foto_yolu], (err) => {
         if(err) {
             return console.log(err.message); 
         }
-        console.log('Row was added to the table: ${this.lastID}');
     })  
 
     gaziokculukDB.all(sql, [], (err, rows) => {
@@ -343,45 +350,87 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
 
 });
 
-
-
 router.get('/malzemelerigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
 
-    pool.getConnection()
-        .then(conn => {
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
 
-            conn.query("SELECT * from malzemeler")
-                .then((rows) => {
-                    console.log(rows); //[ {val: 1}, meta: ... ]
-                    res.json(rows);
+    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
 
-                })
-                .then((res) => {
-                    console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
-                    conn.end();
-                })
-                .catch(err => {
-                    //handle error
-                    console.log(err);
-                    conn.end();
-                })
+    let sql = `SELECT * FROM malzemeler`;
 
-        }).catch(err => {
-            console.log(err);
-            conn.end();
-
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
         });
+        return res.json(rows);
+    });
 
 
+
+    // close the database connection
+
+    gaziokculukDB.close();
 });
 
-router.get('malzemeekle'), function (req,res,next)
+router.get('/malzemeekle', function (req, res, next)
 {
+    if(req.query.malzeme_adi===undefined  || req.query.malzeme_fiyati === undefined || req.query.malzeme_ozellik === undefined || req.query.malzeme_foto_yolu === undefined)
+    {
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
     
-}
+    let sql = `SELECT * FROM malzemeler`;
+// ADD THIS CODE BELOW
+gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
+    if (error){
+        console.error("Pragma statement didn't work.")
+    } else {
+        console.log("Foreign Key Enforcement is on.")
+    }
+});
+
+    gaziokculukDB.run('insert into malzemeler (malzeme_adi,malzeme_fiyati,malzeme_ozellik,malzeme_foto_yolu) values (?,?,?,?) ',
+     [req.query.malzeme_adi,req.query.malzeme_fiyati,req.query.malzeme_ozellik,req.query.malzeme_foto_yolu], (err) => {
+        if(err) {
+            return console.log(err.message); 
+        }
+    })  
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+
+});
 
 module.exports = router;
