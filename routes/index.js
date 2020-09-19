@@ -399,14 +399,13 @@ router.get('/malzemeekle', function (req, res, next)
     });
     
     let sql = `SELECT * FROM malzemeler`;
-// ADD THIS CODE BELOW
-gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
-    if (error){
+     gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
+      if (error){
         console.error("Pragma statement didn't work.")
-    } else {
+      } else {
         console.log("Foreign Key Enforcement is on.")
-    }
-});
+      }
+     });
 
     gaziokculukDB.run('insert into malzemeler (malzeme_adi,malzeme_fiyati,malzeme_ozellik,malzeme_foto_yolu) values (?,?,?,?) ',
      [req.query.malzeme_adi,req.query.malzeme_fiyati,req.query.malzeme_ozellik,req.query.malzeme_foto_yolu], (err) => {
@@ -415,6 +414,88 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
         }
     })  
 
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+
+});
+
+router.get('/kurslarigetir', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+
+    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
+
+    let sql = `SELECT * FROM kurslar`;
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+});
+
+router.get('/kursekle', function (req, res, next)
+{
+    if(req.query.kurs_adi===undefined  || req.query.kurs_baslangic_saati === undefined || req.query.kurs_bitis_saati === undefined || req.query.kurs_gunleri === undefined)
+    {
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+    
+     gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
+      if (error){
+        console.error("Pragma statement didn't work.")
+      } else {
+        console.log("Foreign Key Enforcement is on.")
+      }
+     });
+
+    gaziokculukDB.run('insert into kurslar (kurs_adi,kurs_baslangic_saati,kurs_bitis_saati,kurs_gunleri) values (?,?,?,?) ',
+     [req.query.kurs_adi,req.query.kurs_baslangic_saati,req.query.kurs_bitis_saati,req.query.kurs_gunleri], (err) => {
+        if(err) {
+            return console.log(err.message); 
+        }
+    })  
+
+    let sql = `SELECT * FROM kurslar`;
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
             throw err;
