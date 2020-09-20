@@ -110,7 +110,6 @@ router.get('/Images/Madalyalar', function (req, res, next) {
 
 });
 
-
 router.get('/', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -304,11 +303,17 @@ router.get('/haberekle', function (req, res, next) {
  
     if(req.query.haber_basligi===undefined  || req.query.haber_icerigi === undefined || req.query.haber_tarihi === undefined || req.query.haber_foto_yolu === undefined)
     {
+        res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
         return;
     }    
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
+            res.json(err);
             console.log(err.message);
         }
         console.log("Connected to database!");
@@ -328,12 +333,14 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
     gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ',
      [req.query.haber_basligi,req.query.haber_icerigi,req.query.haber_tarihi,req.query.haber_foto_yolu], (err) => {
         if(err) {
+            res.json(err);
             return console.log(err.message); 
         }
     })  
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
+            res.json(err);
             throw err;
         }
         rows.forEach((row) => {
@@ -388,11 +395,17 @@ router.get('/malzemeekle', function (req, res, next)
 {
     if(req.query.malzeme_adi===undefined  || req.query.malzeme_fiyati === undefined || req.query.malzeme_ozellik === undefined || req.query.malzeme_foto_yolu === undefined)
     {
+        res.json([
+        {
+            errorMessage:"Encountered undefined variables"
+        }
+    ]);
         return;
     }    
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
+            res.json(err);
             console.log(err.message);
         }
         console.log("Connected to database!");
@@ -410,12 +423,14 @@ router.get('/malzemeekle', function (req, res, next)
     gaziokculukDB.run('insert into malzemeler (malzeme_adi,malzeme_fiyati,malzeme_ozellik,malzeme_foto_yolu) values (?,?,?,?) ',
      [req.query.malzeme_adi,req.query.malzeme_fiyati,req.query.malzeme_ozellik,req.query.malzeme_foto_yolu], (err) => {
         if(err) {
+            res.json(err);
             return console.log(err.message); 
         }
     })  
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
+            res.json(err);
             throw err;
         }
         rows.forEach((row) => {
@@ -470,11 +485,17 @@ router.get('/kursekle', function (req, res, next)
 {
     if(req.query.kurs_adi===undefined  || req.query.kurs_baslangic_saati === undefined || req.query.kurs_bitis_saati === undefined || req.query.kurs_gunleri === undefined)
     {
+        res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
         return;
     }    
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
+            res.json(err);
             console.log(err.message);
         }
         console.log("Connected to database!");
@@ -498,6 +519,7 @@ router.get('/kursekle', function (req, res, next)
     let sql = `SELECT * FROM kurslar`;
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
+            res.json(err);
             throw err;
         }
         rows.forEach((row) => {
