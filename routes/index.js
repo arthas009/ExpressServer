@@ -462,6 +462,107 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
 
 });
 
+router.get('/haberguncelle', function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+ 
+    if(req.query.haber_id === undefined ||
+        req.query.haber_basligi===undefined  || 
+        req.query.haber_icerigi === undefined || req.query.haber_tarihi === undefined || req.query.haber_foto_yolu === undefined)
+    {
+        res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
+
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+            return;
+        }
+        console.log("Connected to database!");
+    });
+      
+    gaziokculukDB.run('update haberler set(haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) (?,?,?,?) where haber_id = '+req.query.haber_id+'',
+     [req.query.haber_basligi,req.query.haber_icerigi,req.query.haber_tarihi,req.query.haber_foto_yolu], (err) => {
+        if(err) {
+            gaziokculukDB.close();
+            return console.log(err.message); 
+        }
+    })  
+    let sql = `SELECT * FROM haberler`;
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+    gaziokculukDB.close();
+
+});
+
+router.get('/habersil', function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+ 
+    if(req.query.haber_id === undefined ||
+        req.query.haber_basligi===undefined  || 
+        req.query.haber_icerigi === undefined || req.query.haber_tarihi === undefined || req.query.haber_foto_yolu === undefined)
+    {
+        res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
+
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+            return;
+        }
+        console.log("Connected to database!");
+    });
+    
+    gaziokculukDB.run('delete from haberler where haber_id = '+req.query.haber_id+'', (err) => {
+        if(err) {
+            gaziokculukDB.close();
+            return console.log(err.message); 
+        }
+    });
+
+    let sql = `SELECT * FROM haberler`;
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+    gaziokculukDB.close();
+
+});
+
 router.get('/malzemelerigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -549,6 +650,105 @@ router.get('/malzemeekle', function (req, res, next)
 
 
     // close the database connection
+
+    gaziokculukDB.close();
+
+});
+
+router.get('/malzemeguncelle', function (req, res, next) {
+    
+
+    if( req.query.malzeme_id===undefined  ||
+        req.query.malzeme_adi===undefined  
+        || req.query.malzeme_fiyati === undefined || 
+        req.query.malzeme_ozellik === undefined || 
+        req.query.malzeme_foto_yolu === undefined)
+    {
+        res.json([
+        {
+            errorMessage:"Encountered undefined variables"
+        }
+    ]);
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+    
+
+    gaziokculukDB.run('update malzemeler set (malzeme_adi,malzeme_fiyati,malzeme_ozellik,malzeme_foto_yolu) values (?,?,?,?) where malzeme_id = '+req.query.malzeme_id+'',
+     [req.query.malzeme_adi,req.query.malzeme_fiyati,req.query.malzeme_ozellik,req.query.malzeme_foto_yolu], (err) => {
+        if(err) {
+            gaziokculukDB.close();
+            return console.log(err.message); 
+        }
+    })  
+    let sql = `SELECT * FROM malzemeler`;   
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+    gaziokculukDB.close();
+
+});
+
+router.get('/malzemesil', function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+ 
+    if(req.query.haber_id === undefined ||
+        req.query.haber_basligi===undefined  || 
+        req.query.haber_icerigi === undefined || req.query.haber_tarihi === undefined || req.query.haber_foto_yolu === undefined)
+    {
+        res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
+
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+            return;
+        }
+        console.log("Connected to database!");
+    });
+    
+    gaziokculukDB.run('delete from malzemeler where malzeme_id = '+req.query.malzeme_id+'', (err) => {
+        if(err) {
+            gaziokculukDB.close();
+            return console.log(err.message); 
+        }
+    });
+
+    let sql = `SELECT * FROM malzemeler`;
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
 
     gaziokculukDB.close();
 

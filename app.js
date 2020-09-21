@@ -32,14 +32,14 @@ let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
   }
   console.log("Connected to database!");
 });
-dbSchema = "create table if not exists haberler(haber_id int auto_increment, haber_basligi nvarchar(255),"
-+"haber_icerigi nvarchar(1000), haber_tarihi date, haber_foto_yolu nvarchar(255), primary key(haber_id));"+
+dbSchema = "create table if not exists haberler(haber_id INTEGER NOT NULL PRIMARY KEY, haber_basligi nvarchar(255),"
++"haber_icerigi nvarchar(1000), haber_tarihi date, haber_foto_yolu nvarchar(255));"+
 
-"create table if not exists malzemeler(malzeme_id int auto_increment, malzeme_adi nvarchar(255),"+
-"malzeme_fiyati varchar(100), malzeme_ozellik nvarchar(255), malzeme_foto_yolu nvarchar(255), primary key(malzeme_id));"+
+"create table if not exists malzemeler(malzeme_id INTEGER NOT NULL PRIMARY KEY, malzeme_adi nvarchar(255),"+
+"malzeme_fiyati varchar(100), malzeme_ozellik nvarchar(255), malzeme_foto_yolu nvarchar(255));"+
 
-"create table if not exists kurslar(kurs_id int auto_increment, kurs_adi nvarchar(255), kurs_baslangic_saati nvarchar(255),"+
-"kurs_bitis_saati nvarchar(255), kurs_gunleri nvarchar(255), egitmen_adi nvarchar(255), primary key(kurs_id));"
+"create table if not exists kurslar(kurs_id INTEGER NOT NULL PRIMARY KEY, kurs_adi nvarchar(255), kurs_baslangic_saati nvarchar(255),"+
+"kurs_bitis_saati nvarchar(255), kurs_gunleri nvarchar(255), egitmen_adi nvarchar(255));"
 ;
 gaziokculukDB.exec(dbSchema, function(err){
   if (err) {
