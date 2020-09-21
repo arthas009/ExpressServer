@@ -9,6 +9,10 @@ const indexHtml = path.join(__dirname + '/../public', 'index.html');
 const directoryPathKlubumuz = path.join("./public/Images", 'Klubumuz');
 const directoryPathMadalyalar = path.join("./public/Images", 'Madalyalar');
 const directoryPathSporcularimiz = path.join("./public/Images", 'Sporcularimiz');
+
+const directoryPathKlubumuzVideo = path.join("./public/Videos", 'Klubumuz');
+const directoryPathMadalyalarVideo = path.join("./public/Videos", 'Madalyalar');
+const directoryPathSporcularimizVideo = path.join("./public/Videos", 'Sporcularimiz');
 let TotalPackageCounter = 0;
 
 
@@ -109,6 +113,111 @@ router.get('/Images/Madalyalar', function (req, res, next) {
     });
 
 });
+
+router.get('/Videos/Sporcularimiz', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var Galeri = {};
+    Galeri['Videos'] = [];
+
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathSporcularimizVideo, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+
+            //* mysql ilgili yerleri okuma kodu buraya eklenecek */ 
+            var data = {
+                videoNumber: counter++,
+                videoName: '/Videos/Sporcularimiz/' + file,
+            };
+            Galeri['Videos'].push(data);
+
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
+    });
+
+
+});
+
+router.get('/Videos/Klubumuz', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var Galeri = {};
+    Galeri['Videos'] = [];
+
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathKlubumuzVideo, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+
+            //* mysql ilgili yerleri okuma kodu buraya eklenecek */ 
+            var data = {
+                videoNumber: counter++,
+                videoName: '/Videos/Sporcularimiz/' + file,
+            };
+            Galeri['Videos'].push(data);
+
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
+    });
+
+
+});
+
+router.get('/Videos/Madalyalar', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var Galeri = {};
+    Galeri['Videos'] = [];
+
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathMadalyalarVideo, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+
+            //* mysql ilgili yerleri okuma kodu buraya eklenecek */ 
+            var data = {
+                videoNumber: counter++,
+                videoName: '/Videos/Sporcularimiz/' + file,
+            };
+            Galeri['Videos'].push(data);
+
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
+    });
+
+
+});
+
+
+
 
 router.get('/', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -268,18 +377,11 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
     }
 });
 
-/*
-    gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ', ['eba','ebaaa','2020-01-01','c://eba.public'], (err) => {
-        if(err) {
-            return console.log(err.message); 
-        }
-        console.log('Row was added to the table: ${this.lastID}');
-    })  
-*/
-    gaziokculukDB.all(sql, [], (err, rows) => {
+   gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
-            throw err;
-        }
+            gaziokculukDB.close();
+            return;
+                }
         rows.forEach((row) => {
             console.log(rows);
         });
@@ -308,13 +410,14 @@ router.get('/haberekle', function (req, res, next) {
                 errorMessage:"Encountered undefined variables"
             }
         ]);
+
         return;
     }    
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
-            res.json(err);
             console.log(err.message);
+            return;
         }
         console.log("Connected to database!");
     });
@@ -324,6 +427,8 @@ router.get('/haberekle', function (req, res, next) {
 gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
     if (error){
         console.error("Pragma statement didn't work.")
+        gaziokculukDB.close();
+        return;
     } else {
         console.log("Foreign Key Enforcement is on.")
     }
@@ -333,15 +438,15 @@ gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
     gaziokculukDB.run('insert into haberler (haber_basligi,haber_icerigi,haber_tarihi,haber_foto_yolu) values (?,?,?,?) ',
      [req.query.haber_basligi,req.query.haber_icerigi,req.query.haber_tarihi,req.query.haber_foto_yolu], (err) => {
         if(err) {
-            res.json(err);
+            gaziokculukDB.close();
             return console.log(err.message); 
         }
     })  
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
-            res.json(err);
-            throw err;
+            gaziokculukDB.close();
+            return;
         }
         rows.forEach((row) => {
             console.log(rows);
@@ -376,7 +481,8 @@ router.get('/malzemelerigetir', function (req, res, next) {
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
-            throw err;
+            gaziokculukDB.close();
+            return;
         }
         rows.forEach((row) => {
             console.log(rows);
@@ -405,7 +511,6 @@ router.get('/malzemeekle', function (req, res, next)
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
-            res.json(err);
             console.log(err.message);
         }
         console.log("Connected to database!");
@@ -415,6 +520,8 @@ router.get('/malzemeekle', function (req, res, next)
      gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
       if (error){
         console.error("Pragma statement didn't work.")
+        gaziokculukDB.close();
+        return;
       } else {
         console.log("Foreign Key Enforcement is on.")
       }
@@ -423,15 +530,15 @@ router.get('/malzemeekle', function (req, res, next)
     gaziokculukDB.run('insert into malzemeler (malzeme_adi,malzeme_fiyati,malzeme_ozellik,malzeme_foto_yolu) values (?,?,?,?) ',
      [req.query.malzeme_adi,req.query.malzeme_fiyati,req.query.malzeme_ozellik,req.query.malzeme_foto_yolu], (err) => {
         if(err) {
-            res.json(err);
+            gaziokculukDB.close();
             return console.log(err.message); 
         }
     })  
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
-            res.json(err);
-            throw err;
+            gaziokculukDB.close();
+            return;
         }
         rows.forEach((row) => {
             console.log(rows);
@@ -466,7 +573,8 @@ router.get('/kurslarigetir', function (req, res, next) {
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
-            throw err;
+            gaziokculukDB.close();
+            return;
         }
         rows.forEach((row) => {
             console.log(rows);
@@ -483,7 +591,9 @@ router.get('/kurslarigetir', function (req, res, next) {
 
 router.get('/kursekle', function (req, res, next)
 {
-    if(req.query.kurs_adi===undefined  || req.query.kurs_baslangic_saati === undefined || req.query.kurs_bitis_saati === undefined || req.query.kurs_gunleri === undefined)
+    if(req.query.kurs_adi===undefined  || req.query.kurs_baslangic_saati === undefined
+         || req.query.kurs_bitis_saati === undefined || req.query.kurs_gunleri === undefined
+        || req.query.egitmen_adi === undefined)
     {
         res.json([
             {
@@ -495,7 +605,7 @@ router.get('/kursekle', function (req, res, next)
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
-            res.json(err);
+            res.json(["An Error Occured", err]);
             console.log(err.message);
         }
         console.log("Connected to database!");
@@ -504,23 +614,27 @@ router.get('/kursekle', function (req, res, next)
      gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
       if (error){
         console.error("Pragma statement didn't work.")
+        gaziokculukDB.close();
+        return;
       } else {
         console.log("Foreign Key Enforcement is on.")
       }
      });
 
-    gaziokculukDB.run('insert into kurslar (kurs_adi,kurs_baslangic_saati,kurs_bitis_saati,kurs_gunleri) values (?,?,?,?) ',
-     [req.query.kurs_adi,req.query.kurs_baslangic_saati,req.query.kurs_bitis_saati,req.query.kurs_gunleri], (err) => {
+    gaziokculukDB.run('insert into kurslar (kurs_adi,kurs_baslangic_saati,kurs_bitis_saati,kurs_gunleri,egitmen_adi) values (?,?,?,?) ',
+     [req.query.kurs_adi,req.query.kurs_baslangic_saati,req.query.kurs_bitis_saati,req.query.kurs_gunleri,req.query.egitmen_adi], (err) => {
         if(err) {
-            return console.log(err.message); 
+            res.json(["An error occured",err]);
+            gaziokculukDB.close();
+            return;
         }
     })  
 
     let sql = `SELECT * FROM kurslar`;
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
-            res.json(err);
-            throw err;
+            gaziokculukDB.close();
+            return;
         }
         rows.forEach((row) => {
             console.log(rows);
