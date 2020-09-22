@@ -654,8 +654,6 @@ router.get('/malzemeekle', function (req, res, next)
 });
 
 router.get('/malzemeguncelle', function (req, res, next) {
-    
-
     if( req.query.malzeme_id===undefined  ||
         req.query.malzeme_adi===undefined  
         || req.query.malzeme_fiyati === undefined || 
@@ -708,7 +706,7 @@ router.get('/malzemesil', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
  
-    if(req.query.haber_id === undefined)
+    if(req.query.malzeme_id === undefined)
     {
         res.json([
             {
