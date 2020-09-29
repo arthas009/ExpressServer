@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const fs = require('fs');
+var url = require("url");
 const sqlite3 = require('sqlite3').verbose();
 
 const indexHtml = path.join(__dirname + '/../public', 'index.html');
@@ -17,8 +18,7 @@ let TotalPackageCounter = 0;
 
 
 
-/* GET /Images/Sporcularimiz */
-router.get('/Images/Sporcularimiz', function (req, res, next) {
+router.get('/sporcufotolarinigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
@@ -52,7 +52,7 @@ router.get('/Images/Sporcularimiz', function (req, res, next) {
 
 });
 
-router.get('/Images/Klubumuz', function (req, res, next) {
+router.get('/kulupfotolarinigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
@@ -81,9 +81,10 @@ router.get('/Images/Klubumuz', function (req, res, next) {
         res.json(Galeri);
     });
 
+
 });
 
-router.get('/Images/Madalyalar', function (req, res, next) {
+router.get('/madalyalarfotolarinigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
@@ -114,7 +115,112 @@ router.get('/Images/Madalyalar', function (req, res, next) {
 
 });
 
-router.get('/Videos/Sporcularimiz', function (req, res, next) {
+
+/* GET /Images/Sporcularimiz */
+router.get('/Images/Sporcularimiz/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathSporcularimiz, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".jpg") ||file === (path+".png") ||file === (path+".jpeg") )
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathSporcularimiz });
+            }        
+        });     
+    });
+
+
+});
+
+router.get('/Images/Klubumuz/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathKlubumuz, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".jpg") ||file === (path+".png") ||file === (path+".jpeg") )
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathKlubumuz });
+            }        
+        });     
+    });
+
+
+});
+
+router.get('/Images/Madalyalar/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathMadalyalar, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".jpg") ||file === (path+".png") ||file === (path+".jpeg") )
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathMadalyalar });
+            }        
+        });     
+    });
+
+});
+
+
+
+router.get('/sporcuvideolarinigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
@@ -148,7 +254,7 @@ router.get('/Videos/Sporcularimiz', function (req, res, next) {
 
 });
 
-router.get('/Videos/Klubumuz', function (req, res, next) {
+router.get('/kulupvideolarinigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
@@ -182,7 +288,7 @@ router.get('/Videos/Klubumuz', function (req, res, next) {
 
 });
 
-router.get('/Videos/Madalyalar', function (req, res, next) {
+router.get('/madalyalarvideolarinigetir', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
@@ -212,6 +318,112 @@ router.get('/Videos/Madalyalar', function (req, res, next) {
         console.log("Package" + TotalPackageCounter++);
         res.json(Galeri);
     });
+
+
+});
+
+
+
+router.get('/Videos/Sporcularimiz/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathSporcularimizVideo, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".mp4"))
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathSporcularimizVideo });
+            }        
+        });     
+    });
+
+
+});
+
+router.get('/Videos/Klubumuz/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathKlubumuzVideo, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".mp4"))
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathKlubumuzVideo });
+            }        
+        });     
+    });
+
+
+});
+
+router.get('/Videos/Madalyalar/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathMadalyalarVideo, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".mp4"))
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathMadalyalarVideo });
+            }        
+        });     
+    });
+
+
 
 
 });
