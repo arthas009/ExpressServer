@@ -39,6 +39,9 @@ dbSchema = "create table if not exists haberler(haber_id INTEGER NOT NULL PRIMAR
 "create table if not exists malzemeler(malzeme_id INTEGER NOT NULL PRIMARY KEY, malzeme_adi nvarchar(255),"+
 "malzeme_fiyati varchar(100), malzeme_ozellik nvarchar(255), malzeme_foto_yolu nvarchar(255));"+
 
+"create table if not exists sifirmalzemeler(sifirmalzeme_id INTEGER NOT NULL PRIMARY KEY, sifirmalzeme_adi nvarchar(255),"+
+"sifirmalzeme_fiyati varchar(100), sifirmalzeme_ozellik nvarchar(255), sifirmalzeme_foto_yolu nvarchar(255));"+
+
 "create table if not exists kurslar(kurs_id INTEGER NOT NULL PRIMARY KEY, kurs_adi nvarchar(255), kurs_baslangic_saati nvarchar(255),"+
 "kurs_bitis_saati nvarchar(255), kurs_gunleri nvarchar(255), egitmen_adi nvarchar(255));"
 ;

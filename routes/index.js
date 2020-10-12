@@ -12,6 +12,7 @@ const indexHtmlDoubleSlah = (__dirname + '../../public', 'index.html');
 const directoryPathKlubumuz = path.join("./public/Images", 'Klubumuz');
 const directoryPathMadalyalar = path.join("./public/Images", 'Madalyalar');
 const directoryPathSporcularimiz = path.join("./public/Images", 'Sporcularimiz');
+const directoryPathSifirMalzemeler = path.join("./public/Images", 'SifirMalzemeler');
 const directoryPathMalzemeler = path.join("./public/Images", 'Malzemeler');
 const directoryPathHaberler = path.join("./public/Images", 'Haberler');
 
@@ -221,6 +222,219 @@ router.get('/Images/Madalyalar/*', function (req, res, next) {
     });
 
 });
+//burdan
+router.get('/Images/SifirMalzemeler/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathSifirMalzemeler, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".jpg") ||file === (path+".png") ||file === (path+".jpeg") )
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathSifirMalzemeler });
+            }        
+        });     
+    });
+
+});
+router.get('/sifirmalzemelerigetir', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+
+    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
+
+    let sql = `SELECT * FROM sifirmalzemeler`;
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+});
+
+router.get('/sifirmalzemeekle', function (req, res, next)
+{
+    if(req.query.sifirmalzeme_adi===undefined  || req.query.sifirmalzeme_fiyati === undefined || req.query.sifirmalzeme_ozellik === undefined || req.query.sifirmalzeme_foto_yolu === undefined)
+    {
+        res.json([
+        {
+            errorMessage:"Encountered undefined variables"
+        }
+    ]);
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+    
+    let sql = `SELECT * FROM sifirmalzemeler`;
+     gaziokculukDB.exec('PRAGMA foreign_keys = ON;', function(error)  {
+      if (error){
+        console.error("Pragma statement didn't work.")
+        gaziokculukDB.close();
+        return;
+      } else {
+        console.log("Foreign Key Enforcement is on.")
+      }
+     });
+
+    gaziokculukDB.run('insert into sifirmalzemeler (sifirmalzeme_adi,sifirmalzeme_fiyati,sifirmalzeme_ozellik,sifirmalzeme_foto_yolu) values (?,?,?,?) ',
+     [req.query.sifirmalzeme_adi,req.query.sifirmalzeme_fiyati,req.query.sifirmalzeme_ozellik,req.query.sifirmalzeme_foto_yolu], (err) => {
+        if(err) {
+            gaziokculukDB.close();
+            return console.log(err.message); 
+        }
+    })  
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+    router.get('/sifirmalzemeguncelle', function (req, res, next) {
+        if( req.query.sifirmalzeme_id===undefined  ||
+            req.query.sifirmalzeme_adi===undefined  
+            || req.query.sifirmalzeme_fiyati === undefined || 
+            req.query.sifirmalzeme_ozellik === undefined || 
+            req.query.sifirmalzeme_foto_yolu === undefined)
+        {
+            res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
+            return;
+        }    
+    
+        let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+            if(err) {
+                console.log(err.message);
+            }
+            console.log("Connected to database!");
+        });
+        
+    
+        gaziokculukDB.run('update sifirmalzemeler set sifirmalzeme_adi = ?, sifirmalzeme_fiyati = ?,sifirmalzeme_ozellik = ?,sifirmalzeme_foto_yolu = ? where sifirmalzeme_id = ?',
+         [req.query.sifirmalzeme_adi,req.query.sifirmalzeme_fiyati,req.query.sifirmalzeme_ozellik,req.query.sifirmalzeme_foto_yolu,req.query.sifirmalzeme_id], (err) => {
+            if(err) {
+                gaziokculukDB.close();
+                return console.log(err.message); 
+            }
+        })  
+        let sql = `SELECT * FROM sifirmalzemeler`;   
+    
+        gaziokculukDB.all(sql, [], (err, rows) => {
+            if (err) {
+                gaziokculukDB.close();
+                return;
+            }
+            rows.forEach((row) => {
+                console.log(rows);
+            });
+            return res.json(rows);
+        });
+        gaziokculukDB.close();
+    
+    });
+    
+    router.get('/sifirmalzemesil', function (req, res, next) {
+    
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+        res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+     
+        if(req.query.sifirmalzeme_id === undefined)
+        {
+            res.json([
+                {
+                    errorMessage:"Encountered undefined variables"
+                }
+            ]);
+    
+            return;
+        }    
+    
+        let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+            if(err) {
+                console.log(err.message);
+                return;
+            }
+            console.log("Connected to database!");
+        });
+        
+        gaziokculukDB.run('delete from sifirmalzemeler where sifirmalzeme_id = '+req.query.sifirmalzeme_id+'', (err) => {
+            if(err) {
+                gaziokculukDB.close();
+                return console.log(err.message); 
+            }
+        });
+    
+        let sql = `SELECT * FROM sifirmalzemeler`;
+        gaziokculukDB.all(sql, [], (err, rows) => {
+            if (err) {
+                gaziokculukDB.close();
+                return;
+            }
+            rows.forEach((row) => {
+                console.log(rows);
+            });
+            return res.json(rows);
+        });
+    
+        gaziokculukDB.close();
+    
+    });
+
+//buraya
 
 router.get('/Images/Malzemeler/*', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -597,7 +811,7 @@ router.get('/Galeri/Sporcularimiz', function (req, res, next) {
 
 });
 
-router.get('/FarkliBilgiler', function (req, res, next) {
+router.get('/Magaza', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
