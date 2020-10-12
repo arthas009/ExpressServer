@@ -222,7 +222,7 @@ router.get('/Images/Madalyalar/*', function (req, res, next) {
     });
 
 });
-//burdan
+//SIFIR MALZEMELER BURDAN BASLIYO
 router.get('/Images/SifirMalzemeler/*', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -434,7 +434,7 @@ router.get('/sifirmalzemeekle', function (req, res, next)
     
     });
 
-//buraya
+//SIFIR MALZEMELER BURDA BİTİYO
 
 router.get('/Images/Malzemeler/*', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1453,3 +1453,4 @@ router.get('/kurssil', function (req, res, next) {
 });
 
 module.exports = router;
+
