@@ -43,7 +43,17 @@ dbSchema = "create table if not exists haberler(haber_id INTEGER NOT NULL PRIMAR
 "malzeme_fiyati varchar(100), malzeme_ozellik nvarchar(255), malzeme_foto_yolu nvarchar(255));"+
 
 "create table if not exists kurslar(kurs_id INTEGER NOT NULL PRIMARY KEY, kurs_adi nvarchar(255), kurs_baslangic_saati nvarchar(255),"+
-"kurs_bitis_saati nvarchar(255), kurs_gunleri nvarchar(255), egitmen_adi nvarchar(255));"
+"kurs_bitis_saati nvarchar(255), kurs_gunleri nvarchar(255), egitmen_adi nvarchar(255));"+
+
+"create table if not exists okculukhakkinda(baslik_id INTEGER NOT NULL PRIMARY KEY, baslik_adi nvarchar(255), baslik_icerigi nvarchar(255),"+
+"baslik_tarihi_gun nvarchar(255), baslik_tarihi_ay nvarchar(255), baslik_tarihi_yıl nvarchar(255),baslik_foto_adi nvarchar(255));"+
+
+"create table if not exists hakkinda(hakkinda_id INTEGER NOT NULL PRIMARY KEY, biz_kimiz nvarchar(255),"+
+ "tarihce nvarchar(255),misyonumuz nvarchar(255), vizyonumuz nvarchar(255));"
+
+ "create table if not exists iletisim(iletisim_id INTEGER NOT NULL PRIMARY KEY, telefon1 nvarchar(255),"+
+ "telefon2 nvarchar(255),adres nvarchar(255), mail nvarchar(255), facebook nvarchar(255), twitter nvarchar(255)"+
+ " instagram nvarchar(255),youtube nvarchar(255));"
 ;
 gaziokculukDB.exec(dbSchema, function(err){
   if (err) {

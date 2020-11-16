@@ -1265,11 +1265,46 @@ router.get('/kurslarigetir', function (req, res, next) {
     gaziokculukDB.close();
 });
 
-router.get('/kursekle', function (req, res, next)
+router.get('/okculukhakkindagetir', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+
+    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
+
+    let sql = `SELECT * FROM okculukhakkinda`;
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+});
+
+router.get('/okculukhakkindaekle', function (req, res, next)
 {
-    if(req.query.kurs_adi===undefined  || req.query.kurs_baslangic_saati === undefined
-         || req.query.kurs_bitis_saati === undefined || req.query.kurs_gunleri === undefined
-        || req.query.egitmen_adi === undefined)
+    if(req.query.baslik_adi===undefined  || req.query.baslik_icerigi === undefined
+         || req.query.baslik_tarihi_gun === undefined || req.query.baslik_tarihi_ay === undefined
+        || req.query.baslik_tarihi_yıl === undefined || req.query.baslik_foto_adi === undefined)
     {
         res.json([
             {
@@ -1297,7 +1332,8 @@ router.get('/kursekle', function (req, res, next)
       }
      });
 
-    gaziokculukDB.run('insert into kurslar (kurs_adi,kurs_baslangic_saati,kurs_bitis_saati,kurs_gunleri,egitmen_adi) values (?,?,?,?) ',
+    gaziokculukDB.run('insert into okculukhakkinda (baslik_adi,baslik_icerigi,baslik_tarihi_gun,baslik_tarihi_ay,'
+    +'baslik_tarihi_yıl,baslik_foto_adi) values (?,?,?,?,?) ',
      [req.query.kurs_adi,req.query.kurs_baslangic_saati,req.query.kurs_bitis_saati,req.query.kurs_gunleri,req.query.egitmen_adi], (err) => {
         if(err) {
             res.json(["An error occured",err]);
@@ -1306,7 +1342,7 @@ router.get('/kursekle', function (req, res, next)
         }
     })  
 
-    let sql = `SELECT * FROM kurslar`;
+    let sql = `SELECT * FROM okculukhakkinda`;
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
             gaziokculukDB.close();
@@ -1326,19 +1362,20 @@ router.get('/kursekle', function (req, res, next)
 
 });
 
-router.get('/kursguncelle', function (req, res, next) {
+router.get('/okculukhakkindaguncelle', function (req, res, next) {
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
  
-    if( req.query.kurs_id === undefined ||
-        req.query.kurs_adi===undefined  || 
-        req.query.kurs_baslangic_saati === undefined || 
-        req.query.kurs_bitis_saati === undefined ||
-         req.query.kurs_gunleri === undefined || 
-         req.query.egitmen_adi === undefined)
+    if( req.query.baslik_adi === undefined ||
+        req.query.baslik_icerigi===undefined  || 
+        req.query.baslik_tarihi_gun === undefined || 
+        req.query.baslik_tarihi_ay === undefined ||
+         req.query.baslik_tarihi_yıl === undefined || 
+         req.query.baslik_foto_adi === undefined||
+         req.query.baslik_id === undefined)
    {
        res.json([
            {
@@ -1356,10 +1393,116 @@ router.get('/kursguncelle', function (req, res, next) {
         console.log("Connected to database!");
     });
       
-    gaziokculukDB.run('update kurslar set kurs_adi = ?, kurs_baslangic_saati = ?, kurs_bitis_saati = ?'
-    +'kurs_gunleri = ?, egitmen_adi = ? where kurs_id = ?',
-    [req.query.kurs_adi,req.query.kurs_baslangic_saati,req.query.kurs_bitis_saati,
-        req.query.kurs_gunleri,req.query.egitmen_adi,req.query.kurs_id], (err) => {    
+    gaziokculukDB.run('update kurslar set baslik_adi = ?, baslik_icerigi = ?, baslik_tarihi_gun = ?'
+    +'baslik_tarihi_ay = ?, baslik_tarihi_yıl = ?, baslik_foto_adi = ? where baslik_id = ?',
+    [req.query.baslik_adi,req.query.baslik_icerigi,req.query.baslik_tarihi_gun,
+        req.query.baslik_tarihi_ay,req.query.baslik_tarihi_yıl,req.query.baslik_foto_adi,req.query.baslik_id], (err) => {    
+       
+            if(err) {
+           res.json(["An error occured",err]);
+           gaziokculukDB.close();
+           return;
+       }
+   })  
+    let sql = `SELECT * FROM okculukhakkinda`;
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+    gaziokculukDB.close();
+
+});
+
+router.get('/okculukhakkindasil', function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+ 
+    if(req.query.baslik_id === undefined)
+    {
+        res.json([
+            {
+                errorMessage:"Encountered undefined variables"
+            }
+        ]);
+
+        return;
+    }    
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+            return;
+        }
+        console.log("Connected to database!");
+    });
+    
+    gaziokculukDB.run('delete from okculukhakkinda where baslik_id = '+req.query.baslik_id+'', (err) => {
+        if(err) {
+            gaziokculukDB.close();
+            return console.log(err.message); 
+        }
+    });
+
+    let sql = `SELECT * FROM okculukhakkinda`;
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+    gaziokculukDB.close();
+
+});
+
+
+
+router.get('/hakkindaguncelle', function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+ 
+    if( req.query.biz_kimiz === undefined ||
+        req.query.tarihce===undefined  || 
+        req.query.misyonumuz === undefined || 
+        req.query.vizyonumuz === undefined ||
+         req.query.hakkinda_id === undefined)
+   {
+       res.json([
+           {
+               errorMessage:"Encountered undefined variables"
+           }
+       ]);
+       return;
+   }   
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+            return;
+        }
+        console.log("Connected to database!");
+    });
+      
+    gaziokculukDB.run('update hakkinda set biz_kimiz = ?, tarihce = ?, misyonumuz = ?'
+    +'vizyonumuz = ? where hakkinda_id = ?',
+    [req.query.biz_kimiz,req.query.tarihce,req.query.misyonumuz,
+        req.query.vizyonumuz,req.query.hakkinda_id], (err) => {    
        
             if(err) {
            res.json(["An error occured",err]);
@@ -1380,25 +1523,33 @@ router.get('/kursguncelle', function (req, res, next) {
     });
     gaziokculukDB.close();
 
+
 });
 
-router.get('/kurssil', function (req, res, next) {
+router.get('/iletisimguncelle', function (req, res, next) {
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
  
-    if(req.query.kurs_id === undefined)
-    {
-        res.json([
-            {
-                errorMessage:"Encountered undefined variables"
-            }
-        ]);
-
-        return;
-    }    
+    if( req.query.telefon1 === undefined ||
+        req.query.telefon2===undefined  || 
+        req.query.adres === undefined || 
+        req.query.mail === undefined ||
+         req.query.facebook === undefined ||
+         req.query.twitter === undefined ||
+         req.query.instagram === undefined ||
+         req.query.youtube === undefined ||
+         req.query.iletisim_id === undefined)
+   {
+       res.json([
+           {
+               errorMessage:"Encountered undefined variables"
+           }
+       ]);
+       return;
+   }   
 
     let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
         if(err) {
@@ -1407,14 +1558,19 @@ router.get('/kurssil', function (req, res, next) {
         }
         console.log("Connected to database!");
     });
-    
-    gaziokculukDB.run('delete from kurslar where kurs_id = '+req.query.kurs_id+'', (err) => {
-        if(err) {
-            gaziokculukDB.close();
-            return console.log(err.message); 
-        }
-    });
-
+      
+    gaziokculukDB.run('update iletisim set telefon1 = ?, telefon2 = ?, adres = ?'
+    +'mail = ?, facebook = ?,twitter = ?,instagram = ?,youtube = ? where iletisim_id = ?',
+    [req.query.telefon1,req.query.telefon2,req.query.adres,
+        req.query.mail,req.query.facebook,req.query.twitter,
+        req.query.instagram,req.query.youtube,req.query.iletisim_id], (err) => {    
+       
+            if(err) {
+           res.json(["An error occured",err]);
+           gaziokculukDB.close();
+           return;
+       }
+   })  
     let sql = `SELECT * FROM kurslar`;
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
@@ -1426,8 +1582,8 @@ router.get('/kurssil', function (req, res, next) {
         });
         return res.json(rows);
     });
-
     gaziokculukDB.close();
+
 
 });
 
