@@ -1304,7 +1304,7 @@ router.get('/okculukhakkindaekle', function (req, res, next)
 {
     if(req.query.baslik_adi===undefined  || req.query.baslik_icerigi === undefined
          || req.query.baslik_tarihi_gun === undefined || req.query.baslik_tarihi_ay === undefined
-        || req.query.baslik_tarihi_yıl === undefined || req.query.baslik_foto_adi === undefined)
+        || req.query.baslik_tarihi_y覺l === undefined || req.query.baslik_foto_adi === undefined)
     {
         res.json([
             {
@@ -1332,9 +1332,8 @@ router.get('/okculukhakkindaekle', function (req, res, next)
       }
      });
 
-    gaziokculukDB.run('insert into okculukhakkinda (baslik_adi,baslik_icerigi,baslik_tarihi_gun,baslik_tarihi_ay,'
-    +'baslik_tarihi_yıl,baslik_foto_adi) values (?,?,?,?,?) ',
-     [req.query.kurs_adi,req.query.kurs_baslangic_saati,req.query.kurs_bitis_saati,req.query.kurs_gunleri,req.query.egitmen_adi], (err) => {
+    gaziokculukDB.run('insert into okculukhakkinda (baslik_adi,baslik_icerigi,baslik_tarihi,baslik_foto_adi) values (?,?,?,?) ',
+     [req.query.baslik_adi,req.query.baslik_icerigi,req.query.baslik_tarihi,req.query.baslik_foto_adi], (err) => {
         if(err) {
             res.json(["An error occured",err]);
             gaziokculukDB.close();
@@ -1371,9 +1370,7 @@ router.get('/okculukhakkindaguncelle', function (req, res, next) {
  
     if( req.query.baslik_adi === undefined ||
         req.query.baslik_icerigi===undefined  || 
-        req.query.baslik_tarihi_gun === undefined || 
-        req.query.baslik_tarihi_ay === undefined ||
-         req.query.baslik_tarihi_yıl === undefined || 
+        req.query.baslik_tarihi === undefined || 
          req.query.baslik_foto_adi === undefined||
          req.query.baslik_id === undefined)
    {
@@ -1393,10 +1390,9 @@ router.get('/okculukhakkindaguncelle', function (req, res, next) {
         console.log("Connected to database!");
     });
       
-    gaziokculukDB.run('update kurslar set baslik_adi = ?, baslik_icerigi = ?, baslik_tarihi_gun = ?'
-    +'baslik_tarihi_ay = ?, baslik_tarihi_yil = ?, baslik_foto_adi = ? where baslik_id = ?',
-    [req.query.baslik_adi,req.query.baslik_icerigi,req.query.baslik_tarihi_gun,
-        req.query.baslik_tarihi_ay,req.query.baslik_tarihi_yıl,req.query.baslik_foto_adi,req.query.baslik_id], (err) => {
+    gaziokculukDB.run('update okculukhakkinda set baslik_adi = ?, baslik_icerigi = ?, baslik_tarihi, baslik_foto_adi = ? where baslik_id = ?',
+    [req.query.baslik_adi,req.query.baslik_icerigi,req.query.baslik_tarihi,baslik_foto_adi,req.query.baslik_id], (err) => {    
+       
             if(err) {
            res.json(["An error occured",err]);
            gaziokculukDB.close();
@@ -1451,7 +1447,7 @@ router.get('/okculukhakkindasil', function (req, res, next) {
         }
     });
 
-    let sql = `SELECT * FROM okculukhakkinda`;
+    let sql = "SELECT * FROM okculukhakkinda";
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
             gaziokculukDB.close();
@@ -1481,9 +1477,8 @@ router.get('/hakkindagetir', function (req, res, next) {
         console.log("Connected to database!");
     });
 
-    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
 
-    let sql = `SELECT * FROM hakkinda`;
+    let sql = "SELECT * FROM hakkinda";
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
@@ -1532,8 +1527,7 @@ router.get('/hakkindaguncelle', function (req, res, next) {
         console.log("Connected to database!");
     });
       
-    gaziokculukDB.run('update hakkinda set biz_kimiz = ?, tarihce = ?, misyonumuz = ?'
-    +'vizyonumuz = ? where hakkinda_id = ?',
+    gaziokculukDB.run('update hakkinda set biz_kimiz = ?, tarihce = ?, misyonumuz = ?, vizyonumuz = ? where hakkinda_id = ?',
     [req.query.biz_kimiz,req.query.tarihce,req.query.misyonumuz,
         req.query.vizyonumuz,req.query.hakkinda_id], (err) => {    
        
@@ -1543,7 +1537,7 @@ router.get('/hakkindaguncelle', function (req, res, next) {
            return;
        }
    })  
-    let sql = `SELECT * FROM kurslar`;
+    let sql = "SELECT * FROM hakkinda";
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
             gaziokculukDB.close();
@@ -1592,19 +1586,17 @@ router.get('/iletisimguncelle', function (req, res, next) {
         console.log("Connected to database!");
     });
       
-    gaziokculukDB.run('update iletisim set telefon1 = ?, telefon2 = ?, adres = ?'
-    +'mail = ?, facebook = ?,twitter = ?,instagram = ?,youtube = ? where iletisim_id = ?',
+    gaziokculukDB.run('update iletisim set telefon1 = ?, telefon2 = ?, adres = ?, mail = ?, facebook = ?, twitter = ?, instagram = ?, youtube = ? where iletisim_id = ?',
     [req.query.telefon1,req.query.telefon2,req.query.adres,
         req.query.mail,req.query.facebook,req.query.twitter,
-        req.query.instagram,req.query.youtube,req.query.iletisim_id], (err) => {    
-       
-            if(err) {
+        req.query.instagram,req.query.youtube,req.query.iletisim_id], (err) => {
+           if(err) {
            res.json(["An error occured",err]);
            gaziokculukDB.close();
            return;
        }
    })  
-    let sql = `SELECT * FROM iletisim`;
+    let sql = "SELECT * FROM iletisim";
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
             gaziokculukDB.close();
@@ -1633,7 +1625,7 @@ router.get('/iletisimgetir', function (req, res, next) {
         console.log("Connected to database!");
     });
 
-    let sql = `SELECT * FROM iletisim`;
+    let sql = "SELECT * FROM iletisim";
 
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
