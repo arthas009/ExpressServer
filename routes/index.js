@@ -1394,10 +1394,9 @@ router.get('/okculukhakkindaguncelle', function (req, res, next) {
     });
       
     gaziokculukDB.run('update kurslar set baslik_adi = ?, baslik_icerigi = ?, baslik_tarihi_gun = ?'
-    +'baslik_tarihi_ay = ?, baslik_tarihi_yıl = ?, baslik_foto_adi = ? where baslik_id = ?',
+    +'baslik_tarihi_ay = ?, baslik_tarihi_yil = ?, baslik_foto_adi = ? where baslik_id = ?',
     [req.query.baslik_adi,req.query.baslik_icerigi,req.query.baslik_tarihi_gun,
-        req.query.baslik_tarihi_ay,req.query.baslik_tarihi_yıl,req.query.baslik_foto_adi,req.query.baslik_id], (err) => {    
-       
+        req.query.baslik_tarihi_ay,req.query.baslik_tarihi_yıl,req.query.baslik_foto_adi,req.query.baslik_id], (err) => {
             if(err) {
            res.json(["An error occured",err]);
            gaziokculukDB.close();
@@ -1469,6 +1468,40 @@ router.get('/okculukhakkindasil', function (req, res, next) {
 });
 
 
+router.get('/hakkindagetir', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+
+    console.log("PARAMS:"+req.query.yusuf+""+req.query.enes);
+
+    let sql = `SELECT * FROM hakkinda`;
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
+});
 
 router.get('/hakkindaguncelle', function (req, res, next) {
 
@@ -1571,7 +1604,7 @@ router.get('/iletisimguncelle', function (req, res, next) {
            return;
        }
    })  
-    let sql = `SELECT * FROM kurslar`;
+    let sql = `SELECT * FROM iletisim`;
     gaziokculukDB.all(sql, [], (err, rows) => {
         if (err) {
             gaziokculukDB.close();
@@ -1585,6 +1618,39 @@ router.get('/iletisimguncelle', function (req, res, next) {
     gaziokculukDB.close();
 
 
+});
+
+router.get('/iletisimgetir', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    let gaziokculukDB = new sqlite3.Database("./gaziokculuk.db", (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log("Connected to database!");
+    });
+
+    let sql = `SELECT * FROM iletisim`;
+
+    gaziokculukDB.all(sql, [], (err, rows) => {
+        if (err) {
+            gaziokculukDB.close();
+            return;
+        }
+        rows.forEach((row) => {
+            console.log(rows);
+        });
+        return res.json(rows);
+    });
+
+
+
+    // close the database connection
+
+    gaziokculukDB.close();
 });
 
 module.exports = router;
