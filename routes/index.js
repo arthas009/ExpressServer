@@ -12,6 +12,7 @@ const directoryPathMadalyalar = path.join("./public/Images", 'Madalyalar');
 const directoryPathSporcularimiz = path.join("./public/Images", 'Sporcularimiz');
 const directoryPathMalzemeler = path.join("./public/Images", 'Malzemeler');
 const directoryPathHaberler = path.join("./public/Images", 'Haberler');
+const directoryPathAnasayfaFotolari = path.join("./public/Images",'AnasayfaFotolari');
 
 const directoryPathKlubumuzVideo = path.join("./public/Videos", 'Klubumuz');
 const directoryPathMadalyalarVideo = path.join("./public/Videos", 'Madalyalar');
@@ -117,6 +118,38 @@ router.get('/madalyalarfotolarinigetir', function (req, res, next) {
 
 });
 
+router.get('/madalyalarfotolarinigetir', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var Galeri = {};
+    Galeri['Images'] = [];
+
+    let counter = 1;
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathAnasayfaFotolari, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            var data = {
+                imageNumber: counter++,
+                imageName: "/Images/AnasayfaFotolari/" + file,
+            };
+            Galeri['Images'].push(data);
+
+        });
+        console.log(Galeri);
+        console.log("Package" + TotalPackageCounter++);
+        res.json(Galeri);
+    });
+
+});
+
+
 
 /* GET /Images/Sporcularimiz */
 router.get('/Images/Sporcularimiz/*', function (req, res, next) {
@@ -214,6 +247,39 @@ router.get('/Images/Madalyalar/*', function (req, res, next) {
             {
                console.log(file);
                res.sendFile(file , { root: directoryPathMadalyalar });
+            }        
+        });     
+    });
+
+});
+
+router.get('/Images/AnasayfaFotolari/*', function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    var path = url.parse(req.url).pathname;
+    // split and remove empty element;
+    path = path.split('/').filter(function (e) {
+        return e.length > 0;
+    });
+    // remove the first component 'callmethod'
+    path = path.slice(2);
+
+    console.log(path);
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPathAnasayfaFotolari, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        //listing all files using forEach
+        files.forEach(function (file) {
+            if(file === (path+".jpg") ||file === (path+".png") ||file === (path+".jpeg") )
+            {
+               console.log(file);
+               res.sendFile(file , { root: directoryPathAnasayfaFotolari });
             }        
         });     
     });
